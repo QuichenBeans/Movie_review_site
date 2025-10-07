@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="{% static 'movie_review_site/style.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    {% block nav %}
+    <nav class="nav-bar">
+        <ul>
+            <li><a href>big poo></a>/li>
+            <div class="dropdown">
+                <li class="dropbtn"><a href>big poo></a></li>
+                <div class="dropdown-content">
+                    <a href>big poo></a>
+                </div>
+            </div>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+        </ul>
+    </nav>
+    {% endblock %}
+
+    {% block header %}
+    {% endblock %}
+
+    <main>
+
+    {% block content %}
+    {% endblock %}
+
+    </main>
+
+    {% block footer %}
+    {% endblock %}
+
+    {% block script %}
+    {% endblock %}
+
+</body>
+</html>
