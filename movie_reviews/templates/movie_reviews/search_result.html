@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+<title>{% block title %}Search Results{% endblock %}</title>
+
+{% block nav %}
+    <nav class="nav-bar">
+        <div class="search-bar">
+            {{ block.super }}
+        </div>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <div class="dropdown">
+                <li class="dropbtn"><a href>big poo></a></li>
+                <div class="dropdown-content">
+                    <a href>big poo></a>
+                </div>
+            </div>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block header %}
+    <div>
+        <h1>Here are the movies that matched your search</h1>
+    </div>
+{% endblock %}
+<!-- Add filters and sorting of results -->
+
+{% block content %}
+    <main>
+        {% if results %}
+        <div>
+            {% for result in results %}
+            <div>
+                <p>Title: {{ result.title }}</p>
+                <p>Genre: {{ result.genre }}</p>
+                <p>Runtime: {{ result.runtime }}</p>
+                <p>Director: {{ result.director }}</p>
+                <p>Actors: {{ result.actors }}</p>
+                <p>Synopsis: {{ result.synopsis }}</p>
+                <p>Released: {{ result.release_date }}</p>
+                <p>IMDB Rating: {{ result.rating }}</p>
+                <p>Rotten Tomatoes Rating: {{ result.rotten_tomatoes_rating }}</p>
+                <p>Awards: {{ result.awards }}</p>
+                <div>
+                    <a href="{% url 'review' result.title %}" class="btn btn-primary">Write Review for {{ result.title }}</a>
+                    <p>(Note that if you are not logged in you will not be able to review this movie)</p> 
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+                <p>No movies found.</p>
+        {% endif %}
+        </div>
+    </main>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}

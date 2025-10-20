@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+<title>{% block title %}{% endblock %}</title>
+
+{% block nav %}
+    <nav class="nav-bar">
+        <div class="search-bar">
+            {{ block.super }}
+        </div>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <div class="dropdown">
+                <li class="dropbtn"><a href>big poo></a></li>
+                <div class="dropdown-content">
+                    <a href>big poo></a>
+                </div>
+            </div>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block header %}
+    <div>
+        <h2>All Movies</h2>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <form method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" value="Filter & Sort"/>
+    </form>
+
+    {% for key, value in request.GET.items %}
+        {% if key != 'page' %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endif %}
+    {% endfor %}
+
+    {% for obj in object_list %}
+    <div>
+        <p>Title: {{ obj.title }}</p>
+        <p>Genre: {{ obj.genre }}</p>
+        <p>Runtime: {{ obj.runtime }}</p>
+        <p>Director: {{ obj.director }}</p>
+        <p>Actors: {{ obj.actors }}</p>
+        <p>Synopsis: {{ obj.synopsis }}</p>
+        <p>Released: {{ obj.release_date }}</p>
+        <p>IMDB Rating: {{ obj.rating }}</p>
+        <p>Rotten Tomatoes Rating: {{ obj.rotten_tomatoes_rating }}</p>
+        <p>Awards: {{ obj.awards }}</p>
+        <div>
+            <a href="{% url 'review' obj.title %}" class="btn btn-primary">Write Review for {{ obj.title }}</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div>
+        <span>
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}

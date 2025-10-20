@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+<title>{% block title %}Movie Genres{% endblock %}</title>
+
+{% block nav %}
+    <nav class="nav-bar">
+        <div class="search-bar">
+            {{ block.super }}
+        </div>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <div class="dropdown">
+                <li class="dropbtn"><a href>big poo></a></li>
+                <div class="dropdown-content">
+                    <a href>big poo></a>
+                </div>
+            </div>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block header %}
+    <div>
+        <h2>Movie Genres</h2>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div>
+            <p><a href="{% url 'show_genre' genre_name='comedy' %}">Comedy Movies</a></p>
+            <p><a href="{% url 'show_genre' genre_name='horror' %}">Horror Movies</a></p>
+            <p><a href="{% url 'show_genre' genre_name='action' %}">Action Movies</a></p>
+            <p><a href="{% url 'show_genre' genre_name='drama' %}">Drama Movies</a></p>
+            <p><a href="{% url 'show_genre' genre_name='crime' %}">Crime Movies</a></p>
+            <p><a href="{% url 'show_genre' genre_name='fantasy' %}">Fantasy Movies</a></p>
+            <p><a href="{% url 'show_genre' genre_name='sci-fi' %}">Sci-Fi Movies</a></p>
+        </div>    
+    </main>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}

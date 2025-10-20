@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'movie_reviews',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -129,4 +131,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login redirect to home
 
-LOGIN_REDIRECT_URL = "/"  # new
+LOGIN_REDIRECT_URL = "login"  # new

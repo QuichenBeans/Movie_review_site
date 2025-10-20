@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+<title>{% block title %}Your Account{% endblock %}</title>
+
+{% block nav %}
+{% endblock %}
+
+{% block header %}
+    <div>
+        <h1>Your password has been successfully updated</h1>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div>
+            <p>If you'd like to return to your account click <a href="{% url 'account' %}">Here</a></p>
+            <p>Or return <a href="{% url 'home' %}">Home</a></p>
+        </div>
+    </main>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}

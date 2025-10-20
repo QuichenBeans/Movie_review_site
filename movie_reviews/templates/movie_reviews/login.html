@@ -8,24 +8,30 @@
 
 {% block header %}
     <div>
-        <h1>Register Here!</h1>
+        <h1>Login</h1>
     </div>
 {% endblock %}
 
 {% block content %}
-<main>
-    <div>
-        <h2>Login</h2>
+    <main>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}<a href="{% url 'home' %}"> Return Home</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div>
 
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
 
-        <p>If you don't have an account yet create one here <a href="{% url 'signup' %}">Register</a></p>
-    </div>
-</main>
+            <p>If you don't have an account yet create one here <a href="{% url 'signup' %}">Register</a></p>
+        </div>
+    </main>
 {% endblock %}
 
 {% block footer %}

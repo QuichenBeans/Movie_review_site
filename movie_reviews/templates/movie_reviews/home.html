@@ -4,17 +4,27 @@
 
 {% block nav %}
     <nav class="nav-bar">
+        <div class="search-bar">
+            {{ block.super }}
+        </div>
         <ul>
-            <li><a href>big poo></a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
             <div class="dropdown">
-                <li class="dropbtn"><a href>big poo></a></li>
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
                 <div class="dropdown-content">
-                    <a href>big poo></a>
+                    <a href>Top 100 movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
                 </div>
             </div>
+            <li><a href></a></li>
             <li><a href>big poo></a></li>
-            <li><a href>big poo></a></li>
-            <li><a href>big poo></a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;font:inherit;color:inherit;">Logout</button>
+                </form>
+            </li>
         </ul>
     </nav>
 {% endblock %}
@@ -26,12 +36,12 @@
 {% endblock %}
 
 {% block content %}
-<main>
-    <div>
-        <h2>Here is the reviews for all the movies</h2>
-        <p>ALL DA FILMS</p>
-    </div>
-</main>
+    <main>
+        <div>
+            <h2>Here is the reviews for all the movies</h2>
+            <p>ALL DA FILMS</p>
+        </div>
+    </main>
 {% endblock %}
 
 {% block footer %}

@@ -10,18 +10,12 @@
 <body>
     {% block nav %}
     <nav class="nav-bar">
-        <ul>
-            <li><a href>big poo></a>/li>
-            <div class="dropdown">
-                <li class="dropbtn"><a href>big poo></a></li>
-                <div class="dropdown-content">
-                    <a href>big poo></a>
-                </div>
-            </div>
-            <li><a href>big poo></a></li>
-            <li><a href>big poo></a></li>
-            <li><a href>big poo></a></li>
-        </ul>
+        <div>
+            <form action="{% url 'search_result' %}" method="get">
+                <input name="q" type="text" placeholder="Search Titles" value="{{ request.GET.q }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
     </nav>
     {% endblock %}
 
