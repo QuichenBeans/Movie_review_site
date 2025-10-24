@@ -10,9 +10,10 @@
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
             <div class="dropdown">
-                <li class="dropbtn"><a href>big poo></a></li>
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
                 <div class="dropdown-content">
-                    <a href>big poo></a>
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
                 </div>
             </div>
             <li><a href>big poo></a></li>

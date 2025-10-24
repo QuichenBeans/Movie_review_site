@@ -10,9 +10,10 @@
         <ul>
             <li><a href>nav></a></li>
             <div class="dropdown">
-                <li class="dropbtn"><a href>nav></a></li>
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
                 <div class="dropdown-content">
-                    <a href>nav></a>
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
                 </div>
             </div>
             <li><a href>nav></a></li>

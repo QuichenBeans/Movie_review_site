@@ -10,9 +10,10 @@
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
             <div class="dropdown">
-                <li class="dropbtn"><a href>big poo></a></li>
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
                 <div class="dropdown-content">
-                    <a href>big poo></a>
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
                 </div>
             </div>
             <li><a href>big poo></a></li>
@@ -40,8 +41,10 @@
         <table>
             <tr>
                 <th><strong>Movie</strong></th>
+                <th><strong>Title</strong></th>
                 <th><strong>Rating</strong></th>
-                <th><strong>Comment</strong></th>
+                <th><strong>Review</strong></th>
+                <th><strong>Date Created</strong></th>
                 <th><strong>Update</strong></th>
                 <th><strong>Delete</strong></th>
             </tr>
@@ -51,6 +54,7 @@
                     <td>{{ review.title }}</td>
                     <td>{{ review.rating }}</td>
                     <td>{{ review.comment }}</td>
+                    <td>{{ review.date_created }}</td>
                     <td><a href="{% url 'review_update' pk=review.pk %}">Update</a></td>
                     <td><a href="{% url 'review_delete' pk=review.pk %}">X</a></td>
                 </tr>

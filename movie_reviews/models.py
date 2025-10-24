@@ -14,6 +14,7 @@ class Movie(models.Model):
     actors = models.CharField(max_length=100, null=True)
     runtime = models.CharField(max_length=100, null=True)
     awards = models.CharField(max_length=100, null=True)
+    poster_url = models.URLField(max_length=500, blank=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -21,7 +22,7 @@ class Movie(models.Model):
     
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="reviews")
     title = models.CharField(max_length=100, null=True, blank=True)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
     comment = models.TextField(blank=True) 
@@ -30,5 +31,9 @@ class Review(models.Model):
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'movie'], name='unique_movie_review')]
         ordering = ["-date_created"]
+
+    def __str__(self):
+        return f"{self.title} - {self.movie}"
+
 
 

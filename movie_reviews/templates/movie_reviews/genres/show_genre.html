@@ -10,9 +10,10 @@
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
             <div class="dropdown">
-                <li class="dropbtn"><a href>big poo></a></li>
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
                 <div class="dropdown-content">
-                    <a href>big poo></a>
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
                 </div>
             </div>
             <li><a href>big poo></a></li>
@@ -39,23 +40,15 @@
 
             {% for movie in movies %}
             <div>
-                <p>Title: {{ movie.title }}</p>
-                <p>Genre: {{ movie.genre }}</p>
+                <p>Title: <a href="{% url 'movie_detail' movie.title %}">{{ movie.title }}</a></p>
                 <p>Runtime: {{ movie.runtime }}</p>
-                <p>Director: {{ movie.director }}</p>
-                <p>Actors: {{ movie.actors }}</p>
-                <p>Synopsis: {{ movie.synopsis }}</p>
                 <p>Released: {{ movie.release_date }}</p>
                 <p>IMDB Rating: {{ movie.rating }}</p>
-                <p>Rotten Tomatoes Rating: {{ movie.rotten_tomatoes_rating }}</p>
-                <p>Awards: {{ movie.awards }}</p>
-                <div>
-                    <a href="{% url 'review' movie.title %}" class="btn btn-primary">Write Review for {{ movie.title }}</a>
-                </div>
+                <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
             </div>
             {% endfor %}
         </div> 
-        
+
         <div>
             <span>
                 {% if page_obj.has_previous %}

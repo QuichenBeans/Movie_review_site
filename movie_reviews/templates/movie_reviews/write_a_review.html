@@ -8,11 +8,12 @@
             {{ block.super }}
         </div>
         <ul>
-            <li><a href>big poo></a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
             <div class="dropdown">
-                <li class="dropbtn"><a href>big poo></a></li>
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
                 <div class="dropdown-content">
-                    <a href>big poo></a>
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
                 </div>
             </div>
             <li><a href>big poo></a></li>
@@ -31,22 +32,24 @@
 <!-- Add filters and sorting of results -->
 
 {% block content %}
-    <main>
-        <div>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Review</button>
-            </form>
-        </div>
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <p>{{ message }}<a href="{% url 'home' %}"> Return Home</a></p>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </main>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not submitted %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit Review</button>
+        </form>
+    {% else %}
+        <a href="{% url 'home' %}">Return Home</a>
+        <a href="{% url 'account' %}">To Your Account</a>
+    {% endif %}
 {% endblock %}
 
 {% block footer %}

@@ -15,9 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, reverse_lazy
 from movie_reviews import views
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import PasswordResetForm
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,11 +29,37 @@ urlpatterns = [
     path("accounts/login/", views.CustomLoginView.as_view(), name="login"),
     path("logout", views.LogoutView, name='logout'),
 
+    # Forgotten password
+    path("reset_password/", 
+         auth_views.PasswordResetView.as_view(template_name="movie_reviews/forgotten_password/reset_password.html",
+                                              email_template_name="movie_reviews/forgotten_password/password_reset_email.txt",
+                                              subject_template_name="movie_reviews/forgotten_password/password_reset_subject.txt",
+                                              success_url=reverse_lazy("reset_password_done"),
+                                              form_class=PasswordResetForm), 
+                                              name="reset_password"),
+    path("reset_password/done/", 
+         auth_views.PasswordResetDoneView.as_view(
+                                              template_name="movie_reviews/forgotten_password/reset_password_done.html",), 
+                                              name="reset_password_done"),
+    path("reset_password_confirm/<uidb64>/<token>/", 
+         auth_views.PasswordResetConfirmView.as_view(
+                                              template_name="movie_reviews/forgotten_password/reset_password_confirm.html",
+                                              success_url=reverse_lazy("reset_password_complete")), 
+                                              name="reset_password_confirm"),
+    path("reset_password_complete/", 
+         auth_views.PasswordResetCompleteView.as_view(
+                                              template_name="movie_reviews/forgotten_password/reset_password_complete.html"),
+                                              name="reset_password_complete"),
+    
+
     # Account reviews - view, update, delete
     path("account/", views.AccountDisplayView.as_view(), name="account"),
     path("account_reviews", views.AccountReviewDisplayView.as_view(), name="account_reviews"),
     path("review_update/<pk>", views.AccountReviewUpdateView.as_view(), name="review_update"),
     path("review_delete/<pk>", views.AccountReviewDeleteView.as_view(), name="review_delete"),
+
+    # Top movies page
+    path("top_movies/", views.TopMoviesView.as_view(), name="top_movies"),
 
     # All movies page
     path("all_movies/", views.FilterMovieView.as_view(), name="all_movies"),
@@ -41,12 +68,17 @@ urlpatterns = [
     path("genres/", views.ShowAllGenres.as_view(), name="genres"),
     path("genres/<str:genre_name>", views.ShowGenreView.as_view(), name="show_genre"),
 
+    # Popular movies by user review
+    path("user_reviewed_movies/", views.TopUserMoviesView.as_view(), name="user_reviewed_movies"),
+
     # Search results page
     path("search_result/", views.SearchResultView.as_view(), name="search_result"),
 
+    # Movie detail - the detailed view of a movie
+    path("movie_detail/<str:movie_title>/", views.MovieDetailPage.as_view(), name="movie_detail"),
+
     # Writing a review
     path("review/<str:movie_title>/", views.UserReviewView.as_view(), name="review"),
-    path("review_done/", views.user_review_done_view, name="review_done"),
 
     # Account and password change
     path("account_pass_change/", 

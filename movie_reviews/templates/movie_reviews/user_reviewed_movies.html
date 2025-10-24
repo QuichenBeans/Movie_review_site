@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-<title>{% block title %}All Movies{% endblock %}</title>
+<title>{% block title %}Popular Movies{% endblock %}</title>
 
 {% block nav %}
     <nav class="nav-bar">
@@ -25,11 +25,15 @@
 
 {% block header %}
     <div>
-        <h2>All Movies</h2>
+        <h2>Top Movies of all time</h2>
     </div>
 {% endblock %}
 
 {% block content %}
+    <div>
+        <p>Movies are ordered by Hirsty's Film Club users' ratings.</p>
+    </div>
+
     <form method="get">
         {{ filter.form.as_p }}
         <input type="submit" value="Filter & Sort"/>
@@ -43,11 +47,11 @@
 
     {% for obj in object_list %}
     <div>
-        <p>Title: <a href="{% url 'movie_detail' obj.title %}">{{ obj.title }}</a></p>
-        <p>Runtime: {{ obj.runtime }}</p>
-        <p>Released: {{ obj.release_date }}</p>
-        <p>IMDB Rating: {{ obj.rating }}</p>
-        <img src="{{ obj.poster_url }}" alt="{{ obj.title }}">
+        <p>Title: <a href="{% url 'movie_detail' obj.movie.title %}">{{ obj.movie.title }}</a></p>
+        <p>Runtime: {{ obj.movie.runtime }}</p>
+        <p>Released: {{ obj.movie.release_date }}</p>
+        <p>IMDB Rating: {{ obj.movie.rating }}</p>
+        <img src="{{ obj.movie.poster_url }}" alt="{{ obj.movie.title }}">
     </div>
     {% endfor %}
 

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+<title>{% block title %}{{ movie.title }}{% endblock %}</title>
+
+{% block nav %}
+    <nav class="nav-bar">
+        <div class="search-bar">
+            {{ block.super }}
+        </div>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <div class="dropdown">
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
+                <div class="dropdown-content">
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
+                </div>
+            </div>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+            <li><a href>big poo></a></li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block header %}
+    <div>
+        <h2>{{ movie.title }}</h2>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <p>Genre: {{ movie.genre }}</p>
+        <p>Runtime: {{ movie.runtime }}</p>
+        <p>Director: {{ movie.director }}</p>
+        <p>Actors: {{ movie.actors }}</p>
+        <p>Synopsis: {{ movie.synopsis }}</p>
+        <p>Released: {{ movie.release_date }}</p>
+        <p>IMDB Rating: {{ movie.rating }}</p>
+        <p>Rotten Tomatoes Rating: {{ movie.rotten_tomatoes_rating }}</p>
+        <p>Awards: {{ movie.awards }}</p>
+        <img src="{{ movie.poster_url }}" alt="{{ movie.title }}">
+        <div>
+            <p>User reviews:</p>
+            <table>
+                <tr>
+                    <th><strong>Author</strong></th>
+                    <th><strong>Title</strong></th>
+                    <th><strong>Rating</strong></th>
+                    <th><strong>Review</strong></th>
+                </tr>
+                {% for review in movie.reviews.all %}
+                    <tr>
+                        <td>{{ review.user }}</td>
+                        <td>{{ review.title }}</td>
+                        <td>{{ review.rating }}</td>
+                        <td>{{ review.comment }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <a href="{% url 'review' movie.title %}" class="btn btn-primary">Write Review for {{ movie.title }}</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-<title>{% block title %}All Movies{% endblock %}</title>
+<title>{% block title %}Top Movies of All time{% endblock %}</title>
 
 {% block nav %}
     <nav class="nav-bar">
@@ -25,11 +25,15 @@
 
 {% block header %}
     <div>
-        <h2>All Movies</h2>
+        <h2>Top Movies of all time</h2>
     </div>
 {% endblock %}
 
 {% block content %}
+    <div>
+        <p>Films are ordered by IMDB rating, if you would like to use other filters please use them below.</p>
+    </div>
+
     <form method="get">
         {{ filter.form.as_p }}
         <input type="submit" value="Filter & Sort"/>

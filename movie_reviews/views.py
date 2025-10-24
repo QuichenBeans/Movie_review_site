@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import logout
-from .models import Movie, Review
-from .filters import MovieFilter
-from .forms import CustomUserCreationForm, AccountUpdateForm, ReviewMovieForm
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django_filters.views import FilterView
+from .models import Movie, Review
+from .filters import MovieFilter, TopMovieFilter, UserReviewFilter
+from .forms import CustomUserCreationForm, AccountUpdateForm, ReviewMovieForm
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy
-from django.views.generic import View
 from django.contrib import messages
 import requests
 from django.db.models import Q
@@ -18,7 +17,11 @@ from datetime import datetime
 
 API_KEY = '8fdbb97b'
 
-# Simple homepage render
+# Top films by user review rating
+# List reviews for othder users to see - add a separate page that will show user reviews for that specific film
+
+
+# Simple homepage view
 
 def index(request):
     return render(request, "movie_reviews/home.html")
@@ -63,7 +66,7 @@ class AccountDisplayView(LoginRequiredMixin, UpdateView):
 class AccountReviewDisplayView(LoginRequiredMixin, ListView):
     model = Review
     template_name = "movie_reviews/account_reviews.html"
-    paginate_by = 15
+    paginate_by = 12
     context_object_name = "reviews"
 
     def get_queryset(self):
@@ -95,27 +98,29 @@ class UserReviewView(LoginRequiredMixin, View):
 
         if form.is_valid():
             if Review.objects.filter(user=request.user, movie=movie).exists():
-                messages.error(self.request, "You have already reviewed this movie")
+                messages.error(request, "You have already reviewed this movie")
                 return render(request, self.template_name, {
                     'movie': movie,
                     'form': form
                 })
             
             review = form.save(commit=False)
-            review.user = self.request.user
+            review.user = request.user
             review.movie = movie
             review.save()
 
-            return redirect('review_done')
+            messages.success(request, "Thank you for your review!")
+            return render(request, self.template_name, {
+                'movie': movie,
+                'form': self.form_class(),
+                'submitted': True
+            })
         
         return render(request, self.template_name, {
             'movie': movie,
-            'form': form
+            'form': form,
+            'submitted': False
         })
-
-def user_review_done_view(request):
-    messages.success(request, 'Review successfully created')
-    return render(request, "movie_reviews/write_a_review_done.html")
 
 # Updating and deleting review
 
@@ -135,11 +140,33 @@ class AccountReviewUpdateView(UpdateView):
 class FilterMovieView(FilterView):
     model = Movie
     template_name = "movie_reviews/all_movies.html"
-    paginate_by = 6
+    paginate_by = 5
     filterset_class = MovieFilter
 
     def get_queryset(self):
         return Movie.objects.exclude(title__isnull=True).exclude(title='')
+    
+# Movies rated by Users
+
+class TopUserMoviesView(FilterView):
+    model = Review
+    template_name = "movie_reviews/user_reviewed_movies.html"
+    paginate_by = 5
+    filterset_class = UserReviewFilter
+
+    def get_queryset(self):
+        return Review.objects.select_related("movie").all()
+    
+# Top movies of all time
+
+class TopMoviesView(FilterView):
+    model = Movie
+    template_name = "movie_reviews/top_movies.html"
+    paginate_by = 5
+    filterset_class = TopMovieFilter
+
+    def get_queryset(self):
+        return Movie.objects.all().order_by('-rating')
 
 # Movie genres 
 
@@ -154,7 +181,7 @@ class ShowAllGenres(ListView):
 class ShowGenreView(ListView):
     template_name = "movie_reviews/genres/show_genre.html"
     context_object_name = "movies"
-    paginate_by = 6
+    paginate_by = 5
 
     def get_queryset(self):
         self.genre_name = self.kwargs['genre_name']
@@ -164,6 +191,19 @@ class ShowGenreView(ListView):
         context = super().get_context_data(**kwargs)
         context['genre'] = self.genre_name.title()
         return context
+    
+# Movie detail page
+
+class MovieDetailPage(DetailView):
+    model = Movie
+    template_name = "movie_reviews/movie_detail.html"
+    slug_field = "title"
+    slug_url_kwarg = "movie_title"
+    context_object_name = "movie"
+    
+    def get_queryset(self):
+        return Movie.objects.prefetch_related("reviews").all()
+    
 
 # Search bar and attached api call - db save
 
@@ -171,6 +211,7 @@ class SearchResultView(ListView):
     model = Movie
     template_name = "movie_reviews/search_result.html"
     context_object_name = "results"
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -212,6 +253,10 @@ class SearchResultView(ListView):
                     else:
                         release_date = None
 
+                    poster_url = data.get('Poster', '')
+                    if poster_url == 'N/A':
+                        poster_url = ''
+
                     movie, created = Movie.objects.update_or_create(
                         title = data.get('Title', ''),
                         defaults = {
@@ -223,7 +268,8 @@ class SearchResultView(ListView):
                             'actors' : data.get('Actors'),
                             'runtime' : data.get('Runtime'),
                             'awards' : data.get('Awards'),
-                            'rotten_tomatoes_rating' : rotten_tomatoes_rating
+                            'rotten_tomatoes_rating' : rotten_tomatoes_rating,
+                            'poster_url' : poster_url
                         }
                     ) 
                     queryset = Movie.objects.filter(id=movie.id)

@@ -23,3 +23,26 @@ class ReviewMovieForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ("title", "rating", "comment")
+        widgets = {
+            "rating": forms.NumberInput(attrs={
+                "min": 1,
+                "max": 10,
+                "class": "form-control",
+                "placeholder": "Rate between 1 and 10"
+            }),
+            "title": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Enter review title"
+            }),
+            "comment": forms.Textarea(attrs={
+                "class": "form-control",
+                "placeholder": "Write your review here...",
+                "rows": 4
+            })
+        }
+    
+    def clean_rating(self):
+        rating = self.cleaned_data["rating"]
+        if rating < 1 or rating > 10:
+            raise forms.ValidationError("Rating must be between 1 and 10.")
+        return rating

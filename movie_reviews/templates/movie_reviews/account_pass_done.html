@@ -3,6 +3,24 @@
 <title>{% block title %}Your Account{% endblock %}</title>
 
 {% block nav %}
+    <nav class="nav-bar">
+        <div class="search-bar">
+            {{ block.super }}
+        </div>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <div class="dropdown">
+                <li class="dropbtn"><a href="{% url 'all_movies' %}">All Movies</a></li>
+                <div class="dropdown-content">
+                    <a href="{% url 'top_movies' %}">Top movies of all time</a>
+                    <a href="{% url 'genres' %}">Movies by Genre</a>
+                </div>
+            </div>
+            <li><a href>nav></a></li>
+            <li><a href>nav></a></li>
+            <li><a href>nav></a></li>
+        </ul>
+    </nav>
 {% endblock %}
 
 {% block header %}
